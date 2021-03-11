@@ -1,0 +1,8 @@
+author: Thiago 'Codex' Silva
+version: 1.0.0
+api-version: 1.16
+name: SpigUtil
+main: me.thiagocodex.spigutil.SpigUtil
+commands:
+  su:
+    description: do things
