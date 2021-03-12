@@ -3,17 +3,20 @@ package me.thiagocodex.spigutil.system;
 import me.thiagocodex.spigutil.SpigUtil;
 import org.bukkit.entity.Player;
 
+import java.text.DateFormat;
 import java.text.MessageFormat;
-import java.time.ZoneId;
+import java.util.Date;
 import java.util.TimeZone;
 
 public class ServerSystem {
+    private static TimeZone timeZoneObj = TimeZone.getDefault();
+
     public static void gc(Player player) {
         long oldFreeMem = Runtime.getRuntime().freeMemory();
         System.gc();
         long freeMem = Runtime.getRuntime().freeMemory();
         player.sendMessage("");
-        player.sendMessage(SpigUtil.bundle.getString("pluginPrefix") +" "+ MessageFormat.format(SpigUtil.bundle.getString("systemGCPerformed"), memConverter(freeMem - oldFreeMem)));
+        player.sendMessage(SpigUtil.bundle.getString("pluginPrefix") + " " + MessageFormat.format(SpigUtil.bundle.getString("systemGCPerformed"), memConverter(freeMem - oldFreeMem)));
         player.sendMessage("");
     }
 
@@ -23,20 +26,18 @@ public class ServerSystem {
     }
 
     public static void setTimeZone(Player player, String timeZone) {
-        TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of(timeZone)));
-
+        TimeZone.setDefault(timeZoneObj);
+        timeZoneObj = TimeZone.getTimeZone(timeZone);
+        System.setProperty("user.timezone", String.valueOf(timeZone));
         player.sendMessage("");
         player.sendMessage(SpigUtil.bundle.getString("pluginPrefix") + " " +
-                MessageFormat.format(SpigUtil.bundle.getString("systemTimeZoneSet"), System.setProperty("user.timezone", timeZone)));
+                MessageFormat.format(SpigUtil.bundle.getString("systemTimeZoneSet"),
+                        System.getProperty("user.timezone", String.valueOf(timeZone))));
         player.sendMessage("");
     }
 
-    public static String info1() {
-        return "Free Memory: " + Runtime.getRuntime().freeMemory();
-    }
+    public static void time(Player player) {
 
-    public static String info2() {
-        System.gc();
-        return "Free Memory: " + Runtime.getRuntime().freeMemory();
+        player.sendMessage(DateTime.date());
     }
 }

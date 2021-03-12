@@ -27,6 +27,8 @@ public class ServerSystemCommand {
                     case "gc":
                         ServerSystem.gc((Player) commandSender);
                         break;
+                    case "time":
+                        ServerSystem.time((Player) commandSender);
                 }
             }
         }
@@ -35,7 +37,7 @@ public class ServerSystemCommand {
     public static void complete(CommandSender commandSender, String s, String[] strings) {
         Commander.complete.clear();
 
-        if (s.equalsIgnoreCase("su")) {
+        /*if (s.equalsIgnoreCase("su")) {
             if ((strings.length == 3) && strings[1].equalsIgnoreCase("settimezone")) {
 
                 for (String element : SpigUtil.zones) {
@@ -48,6 +50,6 @@ public class ServerSystemCommand {
                     }
                 }
             }
-        }
+        }*/
     }
 }

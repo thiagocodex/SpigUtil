@@ -103,12 +103,9 @@ public class Commander implements CommandExecutor, TabCompleter {
                         ServerSystem.gc((Player) commandSender);
                         break;
                     //tests
-                    case "info1":
-                        commandSender.sendMessage(ServerSystem.info1());
+                    case "time":
+                        ServerSystem.time((Player) commandSender);
                         break;
-                    case "info2":
-                        commandSender.sendMessage(ServerSystem.info2());
-
                 }
                 break;
 

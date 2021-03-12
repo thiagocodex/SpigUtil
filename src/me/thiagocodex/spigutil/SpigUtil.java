@@ -1,19 +1,25 @@
 package me.thiagocodex.spigutil;
 
 import me.thiagocodex.spigutil.config.CustomConfig;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class SpigUtil extends JavaPlugin {
 
-    public static String strLocale;
+    public static String langAndCountry;
+    public static Locale locale;
+
+    public static String zoneID;
+    public static TimeZone timeZone;
+
+    public static String timeFormat;
 
     public static ResourceBundle bundle;
-    public static final String[] zones = {"America/Sao_Paulo"};
 
     @Override
     public void onEnable() {
@@ -25,10 +31,17 @@ public class SpigUtil extends JavaPlugin {
     public static void loadReload() {
         CustomConfig.createFiles();
         CustomConfig.load();
+        timeFormat = CustomConfig.getConfig().getString("Plugin.TimeFormat");
+        langAndCountry = CustomConfig.getConfig().getString("Plugin.Locale");
+        assert langAndCountry != null;
+        locale = new Locale(langAndCountry.split("_")[0], langAndCountry.split("_")[1]);
 
-        strLocale = CustomConfig.getConfig().getString("Plugin.Locale");
-        assert strLocale != null;
-        Locale locale = new Locale(strLocale.split("_")[0], strLocale.split("_")[1]);
+        zoneID = CustomConfig.getConfig().getString("Plugin.ZoneID");
+        assert zoneID != null;
+        timeZone = TimeZone.getTimeZone(ZoneId.of(zoneID));
+        TimeZone.setDefault(timeZone);
+        Locale.setDefault(locale);
+
         bundle = ResourceBundle.getBundle("me.thiagocodex.spigutil.internationalization.messages", locale);
     }
 }

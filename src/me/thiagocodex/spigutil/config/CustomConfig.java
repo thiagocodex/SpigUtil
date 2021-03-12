@@ -45,18 +45,22 @@ public class CustomConfig {
         try {
             Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(configFile), StandardCharsets.UTF_8));
             writer.write("Plugin:\n" +
-                    "  Locale: 'pt_BR'\n" +
+                    "  Locale: 'en_US'\n" +
                     "\n" +
+                    "  ZoneID: 'America/Los_Angeles'\n" +
                     "\n" +
+                    "#You can choose between: # TINY   e.g:  0:50\n" +
+                    "  TimeFormat: 'NORMAL'   # SMALL  e.g:  4:20 pm \n" +
+                    "                         # NORMAL e.g: 11:50 am CST\n" +
                     "\n" +
                     "Plugin_Messages:\n" +
-                    "  Prefix: '&3[&bSpig&aUtil&3]&r'\n" +
+                    "  Prefix: ''\n" +
                     "\n" +
                     "  Enabled: 'Enabled successfully'\n" +
                     "  \n" +
                     "  Reloaded: 'Reloaded Successfully'\n" +
                     "  \n" +
-                    "  Message_Title: '&a------ &6Spig&cUtil &a------&r'\n" +
+                    "  Message_Title: '§a------ §6Spig§cUtil §a------§r'\n" +
                     "  \n" +
                     "  Time_Zone_Set: 'System TimeZone set as%colon% %currenttimezone%'\n" +
                     "  \n" +
