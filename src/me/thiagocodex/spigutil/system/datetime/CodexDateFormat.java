@@ -45,7 +45,8 @@ public class CodexDateFormat {
 
     private static SimpleDateFormat sdfInstance;
 
-    static SimpleDateFormat getSdfInstance(TimeZone timeZone, Locale locale) {
+    static SimpleDateFormat getSdfInstance( final TimeZone timeZone, Locale locale) {
+
         if (sdfInstance == null) {
             sdfInstance = new SimpleDateFormat("", locale);
         } else {
@@ -62,7 +63,7 @@ public class CodexDateFormat {
     }
 
     String format(Date date, String pattern) {
-        SimpleDateFormat simpleDateFormat = getSdfInstance(timeZone, locale);
+        SimpleDateFormat simpleDateFormat = getSdfInstance( timeZone, locale);
         simpleDateFormat.applyPattern("E");
         nomeDiaDoMesCurto = simpleDateFormat.format(date);
         simpleDateFormat.applyPattern("EEEE");

@@ -2,8 +2,11 @@ package me.thiagocodex.spigutil;
 
 import me.thiagocodex.spigutil.command.ReloadCommand;
 import me.thiagocodex.spigutil.search.BlockStateFinder;
+import me.thiagocodex.spigutil.search.EntityFinder;
 import me.thiagocodex.spigutil.search.blockstatesearch.FindBlockState;
 import me.thiagocodex.spigutil.search.blockstatesearch.command.FindBlockStateCommand;
+import me.thiagocodex.spigutil.search.entitysearch.command.FindEntity;
+import me.thiagocodex.spigutil.search.entitysearch.command.FindEntityCommand;
 import me.thiagocodex.spigutil.search.spawnersearch.FindSpawner;
 import me.thiagocodex.spigutil.search.spawnersearch.command.FindSpawnerCommand;
 import me.thiagocodex.spigutil.system.ServerSystem;
@@ -24,7 +27,22 @@ import java.util.List;
 public class Commander implements CommandExecutor, TabCompleter {
 
 
-    public static void commonCommand(BlockStateFinder toFind, CommandSender commandSender, String s, String[] strings) {
+    public static void commonEntityCommand(EntityFinder tofind, CommandSender commandSender, String s, String[] strings) {
+
+        if (s.equalsIgnoreCase("su")) {
+            if (strings[0].equalsIgnoreCase("locate")) {
+
+                //test
+                tofind.setPlayer(((Player) commandSender));
+                tofind.setTarget(strings[2]);
+                tofind.setAmount(Byte.parseByte(strings[3]));
+                tofind.search(((Player) commandSender));
+            }
+        }
+    }
+
+
+    public static void commonBlockStateCommand(BlockStateFinder toFind, CommandSender commandSender, String s, String[] strings) {
         if (s.equalsIgnoreCase("su")) {
             if ((strings.length == 4)
                     && strings[0].equalsIgnoreCase("locate")
@@ -79,6 +97,7 @@ public class Commander implements CommandExecutor, TabCompleter {
     public boolean onCommand(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String s, String[] strings) {
         switch (strings[0]) {
 
+
             case "reload":
                 ReloadCommand.command(commandSender, s, strings);
                 break;
@@ -86,10 +105,13 @@ public class Commander implements CommandExecutor, TabCompleter {
             case "locate":
                 switch (strings[1]) {
                     case "blockstate":
-                        commonCommand(FindBlockState.getInstance(), commandSender, s, strings);
+                        commonBlockStateCommand(FindBlockState.getInstance(), commandSender, s, strings);
                         break;
                     case "spawner":
-                        commonCommand(FindSpawner.getInstance(), commandSender, s, strings);
+                        commonBlockStateCommand(FindSpawner.getInstance(), commandSender, s, strings);
+                        break;
+                    case "entity":
+                        commonEntityCommand(FindEntity.getInstance(), commandSender, s, strings);
                         break;
                 }
                 break;
@@ -132,20 +154,15 @@ public class Commander implements CommandExecutor, TabCompleter {
                             case "spawner":
                                 commonComplete(FindSpawnerCommand.spawnedTypes, strings[1], s, strings);
                                 break;
+                            case "entity":
+                                commonComplete(FindEntityCommand.mobs, strings[1], s, strings);
+                                break;
                             default:
                         }
                         break;
                     case "system":
                         complete.add("time");
                         complete.add("gc");
-                        switch (strings[1]) {
-                            case "settimezone":
-                                ServerSystemCommand.complete(commandSender, s, strings);
-                                break;
-                            case "time":
-                                //
-                                break;
-                        }
                     default:
                 }
             }

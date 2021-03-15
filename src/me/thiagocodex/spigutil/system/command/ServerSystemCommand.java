@@ -1,6 +1,5 @@
 package me.thiagocodex.spigutil.system.command;
 
-import me.thiagocodex.spigutil.Commander;
 import me.thiagocodex.spigutil.system.ServerSystem;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,24 +20,5 @@ public class ServerSystemCommand {
                 }
             }
         }
-    }
-
-    public static void complete(CommandSender commandSender, String s, String[] strings) {
-        Commander.complete.clear();
-
-        /*if (s.equalsIgnoreCase("su")) {
-            if ((strings.length == 3) && strings[1].equalsIgnoreCase("settimezone")) {
-
-                for (String element : SpigUtil.zones) {
-                    for (int i = 1; i <= element.length(); i++) {
-                        if (element.substring(0, i).equalsIgnoreCase(strings[2])) {
-                            Commander.complete.add(element);
-                        } else if (strings[2].length() == 0) {
-                            Commander.complete.addAll(Arrays.asList(SpigUtil.zones));
-                        }
-                    }
-                }
-            }
-        }*/
     }
 }

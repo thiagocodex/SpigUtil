@@ -1,7 +1,6 @@
 package me.thiagocodex.spigutil.system.datetime;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -11,9 +10,6 @@ public class ExtendedFormat {
     public static String formatTypes(TimeZone timeZone, Locale locale, Date date) {
 
         SimpleDateFormat simpleDateFormat = CodexDateFormat.getSdfInstance(timeZone, locale);
-
-
-
 
         switch (locale.toLanguageTag()) {
             case "en-US":

@@ -13,8 +13,21 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FindSpawner extends BlockStateFinder {
+
+    private FindSpawner(Class<?> classType) {
+        super(classType);
+    }
+
+    private static FindSpawner INSTANCE;
+
+    public static FindSpawner getInstance() {
+        return INSTANCE == null ? INSTANCE = new FindSpawner(CraftCreatureSpawner.class) : INSTANCE;
+    }
+
     private List<Map.Entry<BlockState, Double>> checkType(List<Map.Entry<BlockState, Double>> foundList) {
-        foundList.removeAll(foundList.stream().filter(s -> !s.getKey().getClass().getSimpleName().equals("CraftCreatureSpawner")).collect(Collectors.toList()));
+        foundList.removeAll(foundList.stream()
+                .filter(s -> !s.getKey().getClass().getSimpleName().equals("CraftCreatureSpawner"))
+                .collect(Collectors.toList()));
         return super.foundList;
     }
 
@@ -37,29 +50,12 @@ public class FindSpawner extends BlockStateFinder {
                 Location location = creatureSpawner.getLocation();
                 String strLocation = location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ();
                 int distance = super.foundList.get(i).getValue().intValue();
-
                 player.sendMessage(MessageFormat.format(
                         SpigUtil.bundle.getString("blockStateFound"), creatureSpawner.getSpawnedType().name(), strLocation, distance));
-
             }
-            player.sendMessage("");
         } else {
             player.sendMessage(SpigUtil.bundle.getString("blockStateNotFound"));
-            player.sendMessage("");
         }
-    }
-
-
-    private FindSpawner(Class<?> classType) {
-        super(classType);
-    }
-
-    private static FindSpawner INSTANCE;
-
-    public static FindSpawner getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new FindSpawner(CraftCreatureSpawner.class);
-        }
-        return INSTANCE;
+        player.sendMessage("");
     }
 }
