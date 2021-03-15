@@ -16,6 +16,7 @@ public class SpigUtil extends JavaPlugin {
 
     public static String zoneID;
     public static TimeZone timeZone;
+    public static String pattern;
 
     public static String timeFormat;
 
@@ -33,12 +34,14 @@ public class SpigUtil extends JavaPlugin {
         CustomConfig.load();
         timeFormat = CustomConfig.getConfig().getString("Plugin.TimeFormat");
         langAndCountry = CustomConfig.getConfig().getString("Plugin.Locale");
+        zoneID = CustomConfig.getConfig().getString("Plugin.ZoneID");
+        pattern = CustomConfig.getConfig().getString("Plugin.Pattern");
         assert langAndCountry != null;
         locale = new Locale(langAndCountry.split("_")[0], langAndCountry.split("_")[1]);
 
-        zoneID = CustomConfig.getConfig().getString("Plugin.ZoneID");
         assert zoneID != null;
         timeZone = TimeZone.getTimeZone(ZoneId.of(zoneID));
+
         TimeZone.setDefault(timeZone);
         Locale.setDefault(locale);
 

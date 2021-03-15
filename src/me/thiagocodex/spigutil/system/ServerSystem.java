@@ -1,15 +1,13 @@
 package me.thiagocodex.spigutil.system;
 
 import me.thiagocodex.spigutil.SpigUtil;
+import me.thiagocodex.spigutil.system.datetime.DateTime;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.text.DateFormat;
 import java.text.MessageFormat;
-import java.util.Date;
-import java.util.TimeZone;
 
 public class ServerSystem {
-    private static TimeZone timeZoneObj = TimeZone.getDefault();
 
     public static void gc(Player player) {
         long oldFreeMem = Runtime.getRuntime().freeMemory();
@@ -25,19 +23,9 @@ public class ServerSystem {
         return Double.toString(value).substring(0, 4) + "GB";
     }
 
-    public static void setTimeZone(Player player, String timeZone) {
-        TimeZone.setDefault(timeZoneObj);
-        timeZoneObj = TimeZone.getTimeZone(timeZone);
-        System.setProperty("user.timezone", String.valueOf(timeZone));
-        player.sendMessage("");
-        player.sendMessage(SpigUtil.bundle.getString("pluginPrefix") + " " +
-                MessageFormat.format(SpigUtil.bundle.getString("systemTimeZoneSet"),
-                        System.getProperty("user.timezone", String.valueOf(timeZone))));
-        player.sendMessage("");
-    }
-
     public static void time(Player player) {
-
-        player.sendMessage(DateTime.date());
+        player.sendMessage("");
+        player.sendMessage(ChatColor.GOLD +  DateTime.date());
+        player.sendMessage("");
     }
 }

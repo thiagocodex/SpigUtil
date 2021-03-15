@@ -1,13 +1,9 @@
 package me.thiagocodex.spigutil.system.command;
 
 import me.thiagocodex.spigutil.Commander;
-import me.thiagocodex.spigutil.SpigUtil;
 import me.thiagocodex.spigutil.system.ServerSystem;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Arrays;
-import java.util.TimeZone;
 
 public class ServerSystemCommand {
 
@@ -17,13 +13,6 @@ public class ServerSystemCommand {
             if (strings[0].equalsIgnoreCase("system")) {
 
                 switch (strings[1]) {
-                    case "settimezone":
-                        if (Arrays.asList(TimeZone.getAvailableIDs()).contains(strings[2])) {
-                            ServerSystem.setTimeZone((Player) commandSender, strings[2]);
-                        } else {
-                            commandSender.sendMessage("erro teste");
-                        }
-                        break;
                     case "gc":
                         ServerSystem.gc((Player) commandSender);
                         break;

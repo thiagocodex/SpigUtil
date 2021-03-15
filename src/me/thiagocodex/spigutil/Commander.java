@@ -102,13 +102,11 @@ public class Commander implements CommandExecutor, TabCompleter {
                     case "gc":
                         ServerSystem.gc((Player) commandSender);
                         break;
-                    //tests
                     case "time":
                         ServerSystem.time((Player) commandSender);
                         break;
                 }
                 break;
-
         }
         return true;
     }
@@ -138,12 +136,13 @@ public class Commander implements CommandExecutor, TabCompleter {
                         }
                         break;
                     case "system":
-                        complete.add("settimezone");
+                        complete.add("time");
+                        complete.add("gc");
                         switch (strings[1]) {
                             case "settimezone":
                                 ServerSystemCommand.complete(commandSender, s, strings);
                                 break;
-                            case "getprop":
+                            case "time":
                                 //
                                 break;
                         }
