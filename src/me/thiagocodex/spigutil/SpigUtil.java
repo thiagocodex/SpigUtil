@@ -1,6 +1,7 @@
 package me.thiagocodex.spigutil;
 
 import me.thiagocodex.spigutil.config.CustomConfig;
+import me.thiagocodex.spigutil.custommob.CustomSpawn;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.time.ZoneId;
@@ -17,16 +18,26 @@ public class SpigUtil extends JavaPlugin {
     public static String zoneID;
     public static TimeZone timeZone;
     public static String pattern;
-
     public static String timeFormat;
-
     public static ResourceBundle bundle;
+
+
+    public static String zombieCustomName;
+    public static boolean zombieCustomNameVisible;
+
 
     @Override
     public void onEnable() {
         loadReload();
         Objects.requireNonNull(getServer().getPluginCommand("su")).setExecutor(new Commander());
+
+        zombieCustomName = CustomConfig.getCustomMobs().getString("Zombie.CustomName");
+        zombieCustomNameVisible = CustomConfig.getCustomMobs().getBoolean("Zombie.CustomNameVisible");
+
+
+
         getServer().getConsoleSender().sendMessage(bundle.getString("pluginPrefix") + " " + bundle.getString("pluginEnabled"));
+        getServer().getPluginManager().registerEvents(new CustomSpawn(), this);
     }
 
     public static void loadReload() {

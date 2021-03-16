@@ -17,7 +17,9 @@ public class CustomConfig {
     public static SpigUtil plugin = SpigUtil.getPlugin(SpigUtil.class);
 
     private static FileConfiguration config;
+    private static FileConfiguration customMobs;
     private static final File configFile = new File(plugin.getDataFolder(), "config.yml");
+    private static final File customMobsFile = new File(plugin.getDataFolder(), "custom_mobs.yml");
 
     public static void createFiles() {
         try {
@@ -28,6 +30,10 @@ public class CustomConfig {
                 Files.createFile(configFile.toPath());
                 write();
             }
+
+            if (Files.notExists(customMobsFile.toPath())) {
+                Files.createFile(customMobsFile.toPath());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -37,36 +43,47 @@ public class CustomConfig {
         return config;
     }
 
+    public static FileConfiguration getCustomMobs() {
+        return customMobs;
+    }
+
+
     public static void load() {
         config = YamlConfiguration.loadConfiguration(configFile);
+        customMobs = YamlConfiguration.loadConfiguration(customMobsFile);
     }
 
     private static void write() {
         try {
             Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(configFile), StandardCharsets.UTF_8));
             writer.write("Plugin:\n" +
-                    "  Locale: 'en_US'\n" +
+                    "  Locale: 'pt_BR'\n" +
                     "\n" +
-                    "  ZoneID: 'America/Los_Angeles'\n" +
+                    "  ZoneID: 'America/Sao_Paulo'\n" +
                     "\n" +
-                    "#You can choose between: # TINY   e.g:  0:50\n" +
-                    "  TimeFormat: 'NORMAL'   # SMALL  e.g:  4:20 pm \n" +
-                    "                         # NORMAL e.g: 11:50 am CST\n" +
-                    "\n" +
-                    "Plugin_Messages:\n" +
-                    "  Prefix: ''\n" +
-                    "\n" +
-                    "  Enabled: 'Enabled successfully'\n" +
+                    "  TimeFormat: 'EXTENDED'\n" +
                     "  \n" +
-                    "  Reloaded: 'Reloaded Successfully'\n" +
+                    "  Pattern: '<dddd>, <MM>/<dd>/<y> - <h>:<mm>:<ss> <ampm> <z>'\n" +
                     "  \n" +
-                    "  Message_Title: '§a------ §6Spig§cUtil §a------§r'\n" +
-                    "  \n" +
-                    "  Time_Zone_Set: 'System TimeZone set as%colon% %currenttimezone%'\n" +
-                    "  \n" +
-                    "  Garbage_Collector_Exec: 'Garbage collector performed; reallocated memory%colon% %reallocatedmemory%'\n");
+                    "  \n");
             writer.flush();
             writer.close();
+            ////////////////////////////////////////////////
+            Writer writer2 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(customMobsFile), StandardCharsets.UTF_8));
+            writer2.write("Zombie:\n" +
+                    "  CustomName: '&2&lZumbizão Safadon'\n" +
+                    "  CustomNameVisible: true\n" +
+                    "  SpawnPotentials: 5\n" +
+                    "  CustomItemChestPlate: \n" +
+                    "    Material: Diamond_Chest\n" +
+                    "    DropChance: 5\n" +
+                    "  CustomItemLeggings:\n" +
+                    "    Material: Diamond_Leggings\n" +
+                    "  \n" +
+                    "  ");
+            writer2.flush();
+            writer2.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

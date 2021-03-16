@@ -11,6 +11,6 @@ public class DateTime {
         Calendar calendar = Calendar.getInstance(SpigUtil.timeZone, SpigUtil.locale);
         CodexDateFormat codexDateFormat = CodexDateFormat.getInstance(SpigUtil.timeZone, SpigUtil.locale);
 
-        return codexDateFormat.format(calendar.getTime(), SpigUtil.pattern);
+        return codexDateFormat.format(calendar.getTime(), CodexDateFormat.FORMAT.valueOf( SpigUtil.timeFormat));
     }
 }

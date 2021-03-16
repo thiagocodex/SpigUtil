@@ -1,8 +1,9 @@
 package me.thiagocodex.spigutil;
 
 import me.thiagocodex.spigutil.command.ReloadCommand;
+import me.thiagocodex.spigutil.custommob.CustomSpawn;
+import me.thiagocodex.spigutil.custommob.CustomZombie;
 import me.thiagocodex.spigutil.search.BlockStateFinder;
-import me.thiagocodex.spigutil.search.EntityFinder;
 import me.thiagocodex.spigutil.search.blockstatesearch.FindBlockState;
 import me.thiagocodex.spigutil.search.blockstatesearch.command.FindBlockStateCommand;
 import me.thiagocodex.spigutil.search.entitysearch.command.FindEntity;
@@ -10,13 +11,20 @@ import me.thiagocodex.spigutil.search.entitysearch.command.FindEntityCommand;
 import me.thiagocodex.spigutil.search.spawnersearch.FindSpawner;
 import me.thiagocodex.spigutil.search.spawnersearch.command.FindSpawnerCommand;
 import me.thiagocodex.spigutil.system.ServerSystem;
-import me.thiagocodex.spigutil.system.command.ServerSystemCommand;
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_16_R3.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -25,21 +33,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class Commander implements CommandExecutor, TabCompleter {
-
-
-    public static void commonEntityCommand(EntityFinder tofind, CommandSender commandSender, String s, String[] strings) {
-
-        if (s.equalsIgnoreCase("su")) {
-            if (strings[0].equalsIgnoreCase("locate")) {
-
-                //test
-                tofind.setPlayer(((Player) commandSender));
-                tofind.setTarget(strings[2]);
-                tofind.setAmount(Byte.parseByte(strings[3]));
-                tofind.search(((Player) commandSender));
-            }
-        }
-    }
 
 
     public static void commonBlockStateCommand(BlockStateFinder toFind, CommandSender commandSender, String s, String[] strings) {
@@ -97,11 +90,12 @@ public class Commander implements CommandExecutor, TabCompleter {
     public boolean onCommand(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String s, String[] strings) {
         switch (strings[0]) {
 
+            case "test":
 
+                break;
             case "reload":
                 ReloadCommand.command(commandSender, s, strings);
                 break;
-
             case "locate":
                 switch (strings[1]) {
                     case "blockstate":
@@ -111,16 +105,12 @@ public class Commander implements CommandExecutor, TabCompleter {
                         commonBlockStateCommand(FindSpawner.getInstance(), commandSender, s, strings);
                         break;
                     case "entity":
-                        commonEntityCommand(FindEntity.getInstance(), commandSender, s, strings);
+                        FindEntityCommand.commonEntityCommand(FindEntity.getInstance(), commandSender, s, strings);
                         break;
                 }
                 break;
-
             case "system":
                 switch (strings[1]) {
-                    case "settimezone":
-                        ServerSystemCommand.command(commandSender, s, strings);
-                        break;
                     case "gc":
                         ServerSystem.gc((Player) commandSender);
                         break;
@@ -147,6 +137,7 @@ public class Commander implements CommandExecutor, TabCompleter {
                     case "locate":
                         complete.add("blockstate");
                         complete.add("spawner");
+                        complete.add("entity");
                         switch (strings[1]) {
                             case "blockstate":
                                 commonComplete(FindBlockStateCommand.blockStateArray, strings[1], s, strings);

@@ -27,6 +27,8 @@ public class CodexDateFormat {
     private static String segundos2Digitos;
     private static String amPm;
     private static String zoneId;
+    private static String horas1Digito12;
+    private static String horas2Digitos12;
 
     enum FORMAT {
         TINY, SMALL, NORMAL, BIG, EXTENDED
@@ -100,6 +102,9 @@ public class CodexDateFormat {
         amPm = simpleDateFormat.format(date);
         simpleDateFormat.applyPattern("z");
         zoneId = simpleDateFormat.format(date);
+        simpleDateFormat.applyPattern("h");
+        horas1Digito12 = simpleDateFormat.format(date);
+
         return pattern
                 .replaceAll("<dddd>", nomeDiaDoMes)
                 .replaceAll("<ddd>", nomeDiaDoMesCurto)
@@ -111,8 +116,8 @@ public class CodexDateFormat {
                 .replaceAll("<M>", mes1Digito)
                 .replaceAll("<yy>", ano)
                 .replaceAll("<y>", anoCurto)
-                .replaceAll("<hh>", horas2Digitos)
-                .replaceAll("<h>", horas1Digito)
+                .replaceAll("<HH>", horas2Digitos)
+                .replaceAll("<H>", horas1Digito)
                 .replaceAll("<mm>", minutos2Digitos)
                 .replaceAll("<m>", minutos1Digito)
                 .replaceAll("<ss>", segundos2Digitos)
@@ -121,7 +126,8 @@ public class CodexDateFormat {
                         .replaceAll("AM", "am")
                         .replaceAll("PM", "pm"))
                 .replaceAll("<AMPM>", amPm)
-                .replaceAll("<z>", zoneId);
+                .replaceAll("<z>", zoneId)
+                .replaceAll("<h>", horas1Digito12);
     }
 
     String format(Date date, FORMAT format) {
