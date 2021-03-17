@@ -2,7 +2,7 @@ package me.thiagocodex.spigutil.search.blockstatesearch;
 
 import me.thiagocodex.spigutil.SpigUtil;
 import me.thiagocodex.spigutil.search.BlockStateFinder;
-import me.thiagocodex.spigutil.utilities.Util;
+import me.thiagocodex.spigutil.utilities.StringUtil;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlockState;
@@ -25,7 +25,7 @@ public class FindBlockState extends BlockStateFinder {
     @Override
     protected void filter() {
         super.foundList.removeAll(super.foundList.stream()
-                .filter(bs -> !(bs.getKey()).getClass().getSimpleName().equalsIgnoreCase(Util.fixedClassName(super.target)))
+                .filter(bs -> !(bs.getKey()).getClass().getSimpleName().equalsIgnoreCase(StringUtil.fixedClassName(super.target)))
                 .collect(Collectors.toList()));
     }
 

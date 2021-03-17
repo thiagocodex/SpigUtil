@@ -18,8 +18,12 @@ public class CustomConfig {
 
     private static FileConfiguration config;
     private static FileConfiguration customMobs;
+
+    private static FileConfiguration test;
+
     private static final File configFile = new File(plugin.getDataFolder(), "config.yml");
     private static final File customMobsFile = new File(plugin.getDataFolder(), "custom_mobs.yml");
+    private static final File testFile = new File(plugin.getDataFolder(), "test.yml");
 
     public static void createFiles() {
         try {
@@ -34,6 +38,10 @@ public class CustomConfig {
             if (Files.notExists(customMobsFile.toPath())) {
                 Files.createFile(customMobsFile.toPath());
             }
+
+            if (Files.notExists(testFile.toPath())) {
+                Files.createFile(testFile.toPath());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -46,11 +54,15 @@ public class CustomConfig {
     public static FileConfiguration getCustomMobs() {
         return customMobs;
     }
+    public static FileConfiguration getTest() {
+        return test;
+    }
 
 
     public static void load() {
         config = YamlConfiguration.loadConfiguration(configFile);
         customMobs = YamlConfiguration.loadConfiguration(customMobsFile);
+        test = YamlConfiguration.loadConfiguration(testFile);
     }
 
     private static void write() {

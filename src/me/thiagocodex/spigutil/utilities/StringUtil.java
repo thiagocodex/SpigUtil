@@ -1,8 +1,13 @@
 package me.thiagocodex.spigutil.utilities;
 
-public class Util {
+import net.md_5.bungee.api.ChatColor;
+
+public class StringUtil {
 
 
+    public static String color(String text){
+        return ChatColor.translateAlternateColorCodes('&', text);
+    }
 
     public static String fixedClassName(String target) {
         return target.equalsIgnoreCase("structure")

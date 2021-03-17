@@ -2,7 +2,7 @@ package me.thiagocodex.spigutil.search.entitysearch.command;
 
 import me.thiagocodex.spigutil.SpigUtil;
 import me.thiagocodex.spigutil.search.EntityFinder;
-import me.thiagocodex.spigutil.utilities.Util;
+import me.thiagocodex.spigutil.utilities.StringUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
@@ -26,7 +26,7 @@ public class FindEntity extends EntityFinder {
 
     private List<Map.Entry<Entity, Double>> checkType(List<Map.Entry<Entity, Double>> foundList) {
         foundList.removeAll(foundList.stream()
-                .filter(e -> !e.getKey().getClass().getSimpleName().equalsIgnoreCase(Util.fixedClassName(super.target)))
+                .filter(e -> !e.getKey().getClass().getSimpleName().equalsIgnoreCase(StringUtil.fixedClassName(super.target)))
                 .collect(Collectors.toList()));
         return super.foundList;
     }
@@ -44,7 +44,7 @@ public class FindEntity extends EntityFinder {
                 break;
             default:
                 checkType(super.foundList).removeAll(super.foundList.stream()
-                        .filter(s -> !s.getKey().getClass().getSimpleName().equalsIgnoreCase(Util.fixedClassName(super.target)))
+                        .filter(s -> !s.getKey().getClass().getSimpleName().equalsIgnoreCase(StringUtil.fixedClassName(super.target)))
                         .collect(Collectors.toList()));
         }
     }
