@@ -1,85 +1,93 @@
 package me.thiagocodex.spigutil.custommob;
 
+import me.thiagocodex.spigutil.SpigUtil;
 import me.thiagocodex.spigutil.utilities.LoaderUtil;
 import me.thiagocodex.spigutil.utilities.StringUtil;
-import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_16_R3.*;
-import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftZombie;
-import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CustomZombie {
-
     private static final SecureRandom secureRandom = new SecureRandom();
+
     public static void spawn(CreatureSpawnEvent event) {
-
-        event.getEntity().setCustomName(LoaderUtil.customZombieCustomName);
-        event.getEntity().setCustomNameVisible(LoaderUtil.customNameVisible);
-
-        double random = 100 * secureRandom.nextDouble();
-
-        if (random <= LoaderUtil.babyChance)
-            ((Zombie) event.getEntity()).setBaby();
-
+        byte mobSelector = (byte) new SecureRandom().nextInt(LoaderUtil.mobAmount.size());
         double randomDouble = 100 * secureRandom.nextDouble();
+        ItemStack[] itemStacks = new ItemStack[6];
         if (event.getEntity() instanceof Zombie
-                && randomDouble <= LoaderUtil.customZombieSpawnChance
-                && LoaderUtil.customZombieSpawnReasonList.contains(event.getSpawnReason().name())) {
-
-            ItemStack[] itemStacks = new ItemStack[LoaderUtil.customZombieEquipmentList.size()];
+                && randomDouble <= LoaderUtil.mobSpawnChance.get(mobSelector)
+                && LoaderUtil.mobSpawnReasons.get(mobSelector).contains(event.getSpawnReason().name())) {
+            List<List<String>> materials = new ArrayList<>();
+            Collections.addAll(materials, LoaderUtil.mobHelmetMaterial);//0
+            Collections.addAll(materials, LoaderUtil.mobChestPlateMaterial);//1
+            Collections.addAll(materials, LoaderUtil.mobMainHandMaterial);//1
+            Collections.addAll(materials, LoaderUtil.mobOffHandMaterial);//1
+            Collections.addAll(materials, LoaderUtil.mobLeggingsMaterial);//1
+            Collections.addAll(materials, LoaderUtil.mobBootsMaterial);//1
+            List<List<String>> displayNames = new ArrayList<>();
+            Collections.addAll(displayNames, LoaderUtil.mobHelmetDisplayName);//0
+            Collections.addAll(displayNames, LoaderUtil.mobChestPlateDisplayName);//0
+            Collections.addAll(displayNames, LoaderUtil.mobMainHandDisplayName);//0
+            Collections.addAll(displayNames, LoaderUtil.mobOffHandDisplayName);//0
+            Collections.addAll(displayNames, LoaderUtil.mobLeggingsDisplayName);//0
+            Collections.addAll(displayNames, LoaderUtil.mobBootsDisplayName);//0
+            List<List<List<String>>> enchantments = new ArrayList<>();
+            Collections.addAll(enchantments, LoaderUtil.mobHelmetEnchantments);
+            Collections.addAll(enchantments, LoaderUtil.mobChestPlateEnchantments);
+            Collections.addAll(enchantments, LoaderUtil.mobMainHandEnchantments);
+            Collections.addAll(enchantments, LoaderUtil.mobOffHandEnchantments);
+            Collections.addAll(enchantments, LoaderUtil.mobLeggingsEnchantments);
+            Collections.addAll(enchantments, LoaderUtil.mobBootsEnchantments);
             for (int i = 0; i < itemStacks.length; i++) {
-                if (LoaderUtil.customZombieEquipmentList.get(i).equalsIgnoreCase("NONE")) itemStacks[i] = null;
-                else {
-                    itemStacks[i] = new ItemStack(Material.valueOf(LoaderUtil.customZombieEquipmentList.get(i)));
-                    net.minecraft.server.v1_16_R3.ItemStack stack = CraftItemStack.asNMSCopy(itemStacks[i]);
-                    NBTTagCompound tag = stack.getTag() != null ? stack.getTag() : new NBTTagCompound();
-                    tag.setString("SpigUtil", "toRestore");
-                    stack.setTag(tag);
-                    itemStacks[i] = CraftItemStack.asCraftMirror(stack);
+                if (materials.get(i).get(mobSelector) != null) {
+                    itemStacks[i] = new ItemStack(Material.valueOf(materials.get(i).get(mobSelector)));
+                    ItemMeta itemMeta = itemStacks[i].getItemMeta();
+                    itemMeta.getPersistentDataContainer().set(new NamespacedKey(SpigUtil.getPlugin(SpigUtil.class),
+                            "restorable"), PersistentDataType.STRING, "yes");
+                    itemStacks[i].setItemMeta(itemMeta);
                 }
             }
-
-            //START HELMET
-            if (itemStacks[0] != null) {
-                ItemMeta itemMeta = itemStacks[0].getItemMeta();
-                for (String enchantment : LoaderUtil.zombieHelmetEnchantments) {
-                    itemMeta.addEnchant(Enchantment.getByName(enchantment.split("#")[0]),
-                            Integer.parseInt(enchantment.split("#")[1]), true);
+            for (int i = 0; i < itemStacks.length; i++) {
+                ItemStack itemStack = itemStacks[i];
+                if (itemStack != null) {
+                    ItemMeta itemMeta = itemStack.getItemMeta();
+                    for (String enchantment : enchantments.get(i).get(mobSelector)) {
+                        itemMeta.addEnchant(Enchantment.getByName(enchantment.split("#")[0]), Integer.parseInt(enchantment.split("#")[1]), true);
+                    }
+                    itemMeta.setDisplayName(displayNames.get(i).get(mobSelector));
+                    itemMeta.setLore(enchantments.get(i).get(mobSelector).stream()
+                            .map(s -> s = ChatColor.translateAlternateColorCodes('&', s))
+                            .collect(Collectors.toList()));
+                    itemStack.setItemMeta(itemMeta);
                 }
-                List<String> lore = new ArrayList<>();
-
-                lore.addAll(LoaderUtil.customZombieHelmetLores);
-
-                itemMeta.setDisplayName(ChatColor.RESET + LoaderUtil.customZombieHelmetName);
-                itemMeta.setLore(lore);
-                itemStacks[0].setItemMeta(itemMeta);
-                event.getEntity().getEquipment().setHelmetDropChance((float) LoaderUtil.helmetDropChance / 100);
-                event.getEntity().getEquipment().setHelmet(itemStacks[0]);
             }
-            //END HELMET
+            event.getEntity().setCustomName(StringUtil.color(LoaderUtil.mobCustomName.get(mobSelector)));
+            event.getEntity().setCustomNameVisible(LoaderUtil.mobCustomNameVisible.get(mobSelector));
 
-            //START OFFHAND
-            if (itemStacks[4] != null) {
-                ItemMeta itemMeta = itemStacks[3].getItemMeta();
-                List<String> lore = new ArrayList<>();
-                itemMeta.setDisplayName(ChatColor.RESET + "Picareta");
-                itemMeta.setLore(lore);
-                itemStacks[3].setItemMeta(itemMeta);
-                event.getEntity().getEquipment().setItemInOffHandDropChance(1.00f);
-                event.getEntity().getEquipment().setItemInOffHand(itemStacks[3]);
-            }
-            //END HELMET
+            event.getEntity().getEquipment().setHelmet(itemStacks[0]);
+            event.getEntity().getEquipment().setHelmetDropChance((float) (LoaderUtil.mobHelmetDropChance.get(mobSelector) / 100));
+            event.getEntity().getEquipment().setChestplate(itemStacks[1]);
+            event.getEntity().getEquipment().setChestplateDropChance((float) (LoaderUtil.mobChestPlateDropChance.get(mobSelector) / 100));
+            event.getEntity().getEquipment().setItemInMainHand(itemStacks[2]);
+            event.getEntity().getEquipment().setItemInMainHandDropChance((float) (LoaderUtil.mobMainHandDropChance.get(mobSelector) / 100));
+            event.getEntity().getEquipment().setItemInOffHand(itemStacks[3]);
+            event.getEntity().getEquipment().setItemInOffHandDropChance((float) (LoaderUtil.mobOffHandDropChance.get(mobSelector) / 100));
+            event.getEntity().getEquipment().setLeggings(itemStacks[4]);
+            event.getEntity().getEquipment().setLeggingsDropChance((float) (LoaderUtil.mobLeggingsDropChance.get(mobSelector) / 100));
+            event.getEntity().getEquipment().setBoots(itemStacks[5]);
+            event.getEntity().getEquipment().setBootsDropChance((float) (LoaderUtil.mobBootsDropChance.get(mobSelector) / 100));
         }
     }
 }
