@@ -3,7 +3,7 @@ package me.thiagocodex.spigutil;
 import me.thiagocodex.spigutil.config.CustomConfig;
 import me.thiagocodex.spigutil.custommob.CustomSpawn;
 
-import me.thiagocodex.spigutil.system.datetime.Test;
+import me.thiagocodex.spigutil.tests.NBTTAGTEST;
 import me.thiagocodex.spigutil.utilities.LoaderUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -28,7 +28,7 @@ public class SpigUtil extends JavaPlugin {
         Objects.requireNonNull(getServer().getPluginCommand("su")).setExecutor(new Commander());
         getServer().getConsoleSender().sendMessage(bundle.getString("pluginPrefix") + " " + bundle.getString("pluginEnabled"));
         getServer().getPluginManager().registerEvents(new CustomSpawn(), this);
-        getServer().getPluginManager().registerEvents(new Test(), this);
+        getServer().getPluginManager().registerEvents(new NBTTAGTEST(), this);
     }
 
     public static void loadReload() {
