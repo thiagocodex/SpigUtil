@@ -43,7 +43,13 @@ public class LoaderUtil {
     public static final List<String> mobBootsDisplayName = new ArrayList<>();
     public static final List<List<String>> mobBootsLores = new ArrayList<>();
     public static final List<Double> mobBootsDropChance = new ArrayList<>();
-    public static final List<?>[] objects = {mobAmount, mobCustomName, mobCustomNameVisible, mobSpawnChance, mobBabyChance, mobSpawnReasons, mobHelmetMaterial, mobHelmetEnchantments, mobHelmetDisplayName, mobHelmetLores, mobHelmetDropChance, mobChestPlateMaterial, mobChestPlateEnchantments, mobChestPlateDisplayName, mobChestPlateLores, mobChestPlateDropChance, mobMainHandMaterial, mobMainHandEnchantments, mobMainHandDisplayName, mobMainHandLores, mobMainHandDropChance, mobOffHandMaterial, mobOffHandEnchantments, mobOffHandDisplayName, mobOffHandLores, mobOffHandDropChance, mobLeggingsMaterial, mobLeggingsEnchantments, mobLeggingsDisplayName, mobLeggingsLores, mobLeggingsDropChance, mobBootsMaterial, mobBootsEnchantments, mobBootsDisplayName, mobBootsLores, mobBootsDropChance};
+    public static final List<List<String>> mobMainHandAttributeModifier = new ArrayList<>();
+    public static final List<List<String>> mobOffHandAttributeModifier = new ArrayList<>();
+    public static final List<List<String>> mobLeggingsAttributeModifier = new ArrayList<>();
+    public static final List<List<String>> mobBootsAttributeModifier = new ArrayList<>();
+    public static final List<List<String>> mobHelmetAttributeModifier = new ArrayList<>();
+    public static final List<List<String>> mobChestPlateAttributeModifier = new ArrayList<>();
+    public static final List<?>[] objects = {mobAmount, mobCustomName, mobCustomNameVisible, mobSpawnChance, mobBabyChance, mobSpawnReasons, mobHelmetMaterial, mobHelmetEnchantments, mobHelmetDisplayName, mobHelmetLores, mobHelmetDropChance, mobChestPlateMaterial, mobChestPlateEnchantments, mobChestPlateDisplayName, mobChestPlateLores, mobChestPlateDropChance, mobMainHandMaterial, mobMainHandEnchantments, mobMainHandDisplayName, mobMainHandLores, mobMainHandDropChance, mobOffHandMaterial, mobOffHandEnchantments, mobOffHandDisplayName, mobOffHandLores, mobOffHandDropChance, mobLeggingsMaterial, mobLeggingsEnchantments, mobLeggingsDisplayName, mobLeggingsLores, mobLeggingsDropChance, mobBootsMaterial, mobBootsEnchantments, mobBootsDisplayName, mobBootsLores, mobBootsDropChance, mobMainHandAttributeModifier, mobOffHandAttributeModifier, mobLeggingsAttributeModifier, mobHelmetAttributeModifier, mobChestPlateAttributeModifier, mobBootsAttributeModifier};
 
     public static void load() {
         for (List<?> toClear : objects) {
@@ -51,11 +57,13 @@ public class LoaderUtil {
         }
         String keys = CustomConfig.getCustomMobs().getKeys(true).toString();
         String[] subsKeys = keys.replaceAll("CustomZombie\\.", "").replaceAll("[]\\[]", "").split(", ");
+
         for (String number : subsKeys) {
             if (number.matches("[0-9]{1,2}")) {
                 mobAmount.add(Integer.parseInt(number));
             }
         }
+
         for (int i = 1; i <= Collections.max(mobAmount); i++) {
             mobCustomName.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".CustomName"));
             mobCustomNameVisible.add(CustomConfig.getCustomMobs().getBoolean("CustomZombie." + i + ".CustomNameVisible"));
@@ -77,6 +85,12 @@ public class LoaderUtil {
             mobMainHandEnchantments.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".MainHandEquipment.Enchantments"));
             mobMainHandLores.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".MainHandEquipment.Lores"));
             mobMainHandDropChance.add(CustomConfig.getCustomMobs().getDouble("CustomZombie." + i + ".MainHandEquipment.DropChance"));
+            mobHelmetAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".HeadEquipment.Attribute"));
+            mobChestPlateAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".ChestEquipment.Attribute"));
+            mobMainHandAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".MainHandEquipment.Attribute"));
+            mobOffHandAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".OffHandEquipment.Attribute"));
+            mobLeggingsAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".LeggingsEquipment.Attribute"));
+            mobBootsAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".BootsEquipment.Attribute"));
             mobOffHandMaterial.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".OffHandEquipment.Material"));
             mobOffHandEnchantments.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".OffHandEquipment.Enchantments"));
             mobOffHandDisplayName.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".OffHandEquipment.DisplayName"));

@@ -3,12 +3,17 @@ package me.thiagocodex.spigutil.custommob;
 import me.thiagocodex.spigutil.SpigUtil;
 import me.thiagocodex.spigutil.utilities.LoaderUtil;
 import me.thiagocodex.spigutil.utilities.StringUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -17,6 +22,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class CustomZombie {
@@ -50,6 +56,23 @@ public class CustomZombie {
             Collections.addAll(enchantments, LoaderUtil.mobOffHandEnchantments);
             Collections.addAll(enchantments, LoaderUtil.mobLeggingsEnchantments);
             Collections.addAll(enchantments, LoaderUtil.mobBootsEnchantments);
+
+            List<List<List<String>>> lores = new ArrayList<>();
+            Collections.addAll(lores, LoaderUtil.mobHelmetLores);
+            Collections.addAll(lores, LoaderUtil.mobChestPlateLores);
+            Collections.addAll(lores, LoaderUtil.mobMainHandLores);
+            Collections.addAll(lores, LoaderUtil.mobOffHandLores);
+            Collections.addAll(lores, LoaderUtil.mobLeggingsLores);
+            Collections.addAll(lores, LoaderUtil.mobBootsLores);
+
+            List<List<List<String>>> attributesModifiers = new ArrayList<>();
+            Collections.addAll(attributesModifiers, LoaderUtil.mobHelmetAttributeModifier);
+            Collections.addAll(attributesModifiers, LoaderUtil.mobChestPlateAttributeModifier);
+            Collections.addAll(attributesModifiers, LoaderUtil.mobMainHandAttributeModifier);
+            Collections.addAll(attributesModifiers, LoaderUtil.mobOffHandAttributeModifier);
+            Collections.addAll(attributesModifiers, LoaderUtil.mobLeggingsAttributeModifier);
+            Collections.addAll(attributesModifiers, LoaderUtil.mobBootsAttributeModifier);
+
             for (int i = 0; i < itemStacks.length; i++) {
                 if (materials.get(i).get(mobSelector) != null) {
                     itemStacks[i] = new ItemStack(Material.valueOf(materials.get(i).get(mobSelector)));
@@ -64,17 +87,36 @@ public class CustomZombie {
                 if (itemStack != null) {
                     ItemMeta itemMeta = itemStack.getItemMeta();
                     for (String enchantment : enchantments.get(i).get(mobSelector)) {
-                        itemMeta.addEnchant(Enchantment.getByName(enchantment.split("#")[0]), Integer.parseInt(enchantment.split("#")[1]), true);
+                        Enchantment enchant = EnchantmentWrapper.getByKey(NamespacedKey.minecraft(enchantment.split("#")[0].toLowerCase()));
+                        itemMeta.addEnchant(enchant, Integer.parseInt(enchantment.split("#")[1]), true);
                     }
                     itemMeta.setDisplayName(displayNames.get(i).get(mobSelector));
-                    itemMeta.setLore(enchantments.get(i).get(mobSelector).stream()
+
+                    itemMeta.setLore(lores.get(i).get(mobSelector).stream()
                             .map(s -> s = ChatColor.translateAlternateColorCodes('&', s))
                             .collect(Collectors.toList()));
+
+                    for (String attributeModifier : attributesModifiers.get(i).get(mobSelector)) {
+                        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(),
+                                UUID.randomUUID().toString(),
+                                Double.parseDouble(attributeModifier.split("#")[1]),
+                                AttributeModifier.Operation.valueOf(attributeModifier.split("#")[3]),
+                                EquipmentSlot.valueOf(attributeModifier.split("#")[2]));
+                        itemMeta.addAttributeModifier(Attribute.valueOf(attributeModifier.split("#")[0]), modifier);
+                    }
+
+
                     itemStack.setItemMeta(itemMeta);
                 }
             }
             event.getEntity().setCustomName(StringUtil.color(LoaderUtil.mobCustomName.get(mobSelector)));
             event.getEntity().setCustomNameVisible(LoaderUtil.mobCustomNameVisible.get(mobSelector));
+
+
+            if (100 * secureRandom.nextDouble() <= LoaderUtil.mobBabyChance.get(mobSelector))
+                ((Zombie) event.getEntity()).setBaby();
+            else ((Zombie) event.getEntity()).setAdult();
+
 
             event.getEntity().getEquipment().setHelmet(itemStacks[0]);
             event.getEntity().getEquipment().setHelmetDropChance((float) (LoaderUtil.mobHelmetDropChance.get(mobSelector) / 100));

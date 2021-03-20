@@ -11,6 +11,7 @@ import me.thiagocodex.spigutil.search.entitysearch.command.FindEntityCommand;
 import me.thiagocodex.spigutil.search.spawnersearch.FindSpawner;
 import me.thiagocodex.spigutil.search.spawnersearch.command.FindSpawnerCommand;
 import me.thiagocodex.spigutil.system.ServerSystem;
+import me.thiagocodex.spigutil.tests.NBTTagTest;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.Bukkit;
@@ -88,38 +89,40 @@ public class Commander implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String s, String[] strings) {
-        switch (strings[0]) {
 
-            case "test":
-
-                break;
-            case "reload":
-                ReloadCommand.command(commandSender, s, strings);
-                break;
-            case "locate":
-                switch (strings[1]) {
-                    case "blockstate":
-                        commonBlockStateCommand(FindBlockState.getInstance(), commandSender, s, strings);
-                        break;
-                    case "spawner":
-                        commonBlockStateCommand(FindSpawner.getInstance(), commandSender, s, strings);
-                        break;
-                    case "entity":
-                        FindEntityCommand.commonEntityCommand(FindEntity.getInstance(), commandSender, s, strings);
-                        break;
-                }
-                break;
-            case "system":
-                switch (strings[1]) {
-                    case "gc":
-                        ServerSystem.gc((Player) commandSender);
-                        break;
-                    case "time":
-                        ServerSystem.time((Player) commandSender);
-                        break;
-                }
-                break;
-        }
+        if (commandSender.hasPermission("spigutil.admin")) {
+            switch (strings[0]) {
+                case "test":
+                    NBTTagTest.giveMod(((Player) commandSender));
+                    break;
+                case "reload":
+                    ReloadCommand.command(commandSender, s, strings);
+                    break;
+                case "locate":
+                    switch (strings[1]) {
+                        case "blockstate":
+                            commonBlockStateCommand(FindBlockState.getInstance(), commandSender, s, strings);
+                            break;
+                        case "spawner":
+                            commonBlockStateCommand(FindSpawner.getInstance(), commandSender, s, strings);
+                            break;
+                        case "entity":
+                            FindEntityCommand.commonEntityCommand(FindEntity.getInstance(), commandSender, s, strings);
+                            break;
+                    }
+                    break;
+                case "system":
+                    switch (strings[1]) {
+                        case "gc":
+                            ServerSystem.gc((Player) commandSender);
+                            break;
+                        case "time":
+                            ServerSystem.time((Player) commandSender);
+                            break;
+                    }
+                    break;
+            }
+        }else commandSender.sendMessage(ChatColor.RED + "You don't have spigutil.admin permission to do that.");
         return true;
     }
 
