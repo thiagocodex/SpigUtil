@@ -2,9 +2,7 @@ package me.thiagocodex.spigutil.utilities;
 
 import me.thiagocodex.spigutil.config.CustomConfig;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class LoaderUtil {
     public static final List<Integer> mobAmount = new ArrayList<>();
@@ -49,14 +47,22 @@ public class LoaderUtil {
     public static final List<List<String>> mobBootsAttributeModifier = new ArrayList<>();
     public static final List<List<String>> mobHelmetAttributeModifier = new ArrayList<>();
     public static final List<List<String>> mobChestPlateAttributeModifier = new ArrayList<>();
+
+    public static final Map<Integer, String> map = new HashMap<>();
+
+
     public static final List<?>[] objects = {mobAmount, mobCustomName, mobCustomNameVisible, mobSpawnChance, mobBabyChance, mobSpawnReasons, mobHelmetMaterial, mobHelmetEnchantments, mobHelmetDisplayName, mobHelmetLores, mobHelmetDropChance, mobChestPlateMaterial, mobChestPlateEnchantments, mobChestPlateDisplayName, mobChestPlateLores, mobChestPlateDropChance, mobMainHandMaterial, mobMainHandEnchantments, mobMainHandDisplayName, mobMainHandLores, mobMainHandDropChance, mobOffHandMaterial, mobOffHandEnchantments, mobOffHandDisplayName, mobOffHandLores, mobOffHandDropChance, mobLeggingsMaterial, mobLeggingsEnchantments, mobLeggingsDisplayName, mobLeggingsLores, mobLeggingsDropChance, mobBootsMaterial, mobBootsEnchantments, mobBootsDisplayName, mobBootsLores, mobBootsDropChance, mobMainHandAttributeModifier, mobOffHandAttributeModifier, mobLeggingsAttributeModifier, mobHelmetAttributeModifier, mobChestPlateAttributeModifier, mobBootsAttributeModifier};
 
+
     public static void load() {
+
+        map.clear();
+
         for (List<?> toClear : objects) {
             toClear.clear();
         }
         String keys = CustomConfig.getCustomMobs().getKeys(true).toString();
-        String[] subsKeys = keys.replaceAll("CustomZombie\\.", "").replaceAll("[]\\[]", "").split(", ");
+        String[] subsKeys = keys.replaceAll("CustomMob\\.", "").replaceAll("[]\\[]", "").split(", ");
 
         for (String number : subsKeys) {
             if (number.matches("[0-9]{1,2}")) {
@@ -65,47 +71,48 @@ public class LoaderUtil {
         }
 
         for (int i = 1; i <= Collections.max(mobAmount); i++) {
-            mobCustomName.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".CustomName"));
-            mobCustomNameVisible.add(CustomConfig.getCustomMobs().getBoolean("CustomZombie." + i + ".CustomNameVisible"));
-            mobSpawnChance.add(CustomConfig.getCustomMobs().getDouble("CustomZombie." + i + ".SpawnChance"));
-            mobBabyChance.add(CustomConfig.getCustomMobs().getDouble("CustomZombie." + i + ".BabyChance"));
-            mobSpawnReasons.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".SpawnReasons"));
-            mobHelmetMaterial.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".HeadEquipment.Material"));
-            mobHelmetDisplayName.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".HeadEquipment.DisplayName"));
-            mobHelmetEnchantments.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".HeadEquipment.Enchantments"));
-            mobHelmetLores.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".HeadEquipment.Lores"));
-            mobHelmetDropChance.add(CustomConfig.getCustomMobs().getDouble("CustomZombie." + i + ".HeadEquipment.DropChance"));
-            mobChestPlateMaterial.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".ChestEquipment.Material"));
-            mobChestPlateDisplayName.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".ChestEquipment.DisplayName"));
-            mobChestPlateEnchantments.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".ChestEquipment.Enchantments"));
-            mobChestPlateLores.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".ChestEquipment.Lores"));
-            mobChestPlateDropChance.add(CustomConfig.getCustomMobs().getDouble("CustomZombie." + i + ".ChestEquipment.DropChance"));
-            mobMainHandMaterial.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".MainHandEquipment.Material"));
-            mobMainHandDisplayName.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".MainHandEquipment.DisplayName"));
-            mobMainHandEnchantments.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".MainHandEquipment.Enchantments"));
-            mobMainHandLores.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".MainHandEquipment.Lores"));
-            mobMainHandDropChance.add(CustomConfig.getCustomMobs().getDouble("CustomZombie." + i + ".MainHandEquipment.DropChance"));
-            mobHelmetAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".HeadEquipment.Attribute"));
-            mobChestPlateAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".ChestEquipment.Attribute"));
-            mobMainHandAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".MainHandEquipment.Attribute"));
-            mobOffHandAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".OffHandEquipment.Attribute"));
-            mobLeggingsAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".LeggingsEquipment.Attribute"));
-            mobBootsAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".BootsEquipment.Attribute"));
-            mobOffHandMaterial.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".OffHandEquipment.Material"));
-            mobOffHandEnchantments.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".OffHandEquipment.Enchantments"));
-            mobOffHandDisplayName.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".OffHandEquipment.DisplayName"));
-            mobOffHandLores.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".OffHandEquipment.Lores"));
-            mobOffHandDropChance.add(CustomConfig.getCustomMobs().getDouble("CustomZombie." + i + ".OffHandEquipment.DropChance"));
-            mobLeggingsMaterial.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".LeggingsEquipment.Material"));
-            mobLeggingsEnchantments.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".LeggingsEquipment.Enchantments"));
-            mobLeggingsDisplayName.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".LeggingsEquipment.DisplayName"));
-            mobLeggingsLores.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".LeggingsEquipment.Lores"));
-            mobLeggingsDropChance.add(CustomConfig.getCustomMobs().getDouble("CustomZombie." + i + ".LeggingsEquipment.DropChance"));
-            mobBootsMaterial.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".BootsEquipment.Material"));
-            mobBootsDisplayName.add(CustomConfig.getCustomMobs().getString("CustomZombie." + i + ".BootsEquipment.DisplayName"));
-            mobBootsEnchantments.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".BootsEquipment.Enchantments"));
-            mobBootsLores.add(CustomConfig.getCustomMobs().getStringList("CustomZombie." + i + ".BootsEquipment.Lores"));
-            mobBootsDropChance.add(CustomConfig.getCustomMobs().getDouble("CustomZombie." + i + ".BootsEquipment.DropChance"));
+            map.put(i, StringUtil.addCraftPrefix(CustomConfig.getCustomMobs().getString("CustomMob." + i + ".EntityType")));
+            mobCustomName.add(CustomConfig.getCustomMobs().getString("CustomMob." + i + ".CustomName"));
+            mobCustomNameVisible.add(CustomConfig.getCustomMobs().getBoolean("CustomMob." + i + ".CustomNameVisible"));
+            mobSpawnChance.add(CustomConfig.getCustomMobs().getDouble("CustomMob." + i + ".SpawnChance"));
+            mobBabyChance.add(CustomConfig.getCustomMobs().getDouble("CustomMob." + i + ".BabyChance"));
+            mobSpawnReasons.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".SpawnReasons"));
+            mobHelmetMaterial.add(CustomConfig.getCustomMobs().getString("CustomMob." + i + ".HeadEquipment.Material"));
+            mobHelmetDisplayName.add(CustomConfig.getCustomMobs().getString("CustomMob." + i + ".HeadEquipment.DisplayName"));
+            mobHelmetEnchantments.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".HeadEquipment.Enchantments"));
+            mobHelmetLores.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".HeadEquipment.Lores"));
+            mobHelmetDropChance.add(CustomConfig.getCustomMobs().getDouble("CustomMob." + i + ".HeadEquipment.DropChance"));
+            mobChestPlateMaterial.add(CustomConfig.getCustomMobs().getString("CustomMob." + i + ".ChestEquipment.Material"));
+            mobChestPlateDisplayName.add(CustomConfig.getCustomMobs().getString("CustomMob." + i + ".ChestEquipment.DisplayName"));
+            mobChestPlateEnchantments.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".ChestEquipment.Enchantments"));
+            mobChestPlateLores.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".ChestEquipment.Lores"));
+            mobChestPlateDropChance.add(CustomConfig.getCustomMobs().getDouble("CustomMob." + i + ".ChestEquipment.DropChance"));
+            mobMainHandMaterial.add(CustomConfig.getCustomMobs().getString("CustomMob." + i + ".MainHandEquipment.Material"));
+            mobMainHandDisplayName.add(CustomConfig.getCustomMobs().getString("CustomMob." + i + ".MainHandEquipment.DisplayName"));
+            mobMainHandEnchantments.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".MainHandEquipment.Enchantments"));
+            mobMainHandLores.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".MainHandEquipment.Lores"));
+            mobMainHandDropChance.add(CustomConfig.getCustomMobs().getDouble("CustomMob." + i + ".MainHandEquipment.DropChance"));
+            mobHelmetAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".HeadEquipment.Attribute"));
+            mobChestPlateAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".ChestEquipment.Attribute"));
+            mobMainHandAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".MainHandEquipment.Attribute"));
+            mobOffHandAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".OffHandEquipment.Attribute"));
+            mobLeggingsAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".LeggingsEquipment.Attribute"));
+            mobBootsAttributeModifier.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".BootsEquipment.Attribute"));
+            mobOffHandMaterial.add(CustomConfig.getCustomMobs().getString("CustomMob." + i + ".OffHandEquipment.Material"));
+            mobOffHandEnchantments.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".OffHandEquipment.Enchantments"));
+            mobOffHandDisplayName.add(CustomConfig.getCustomMobs().getString("CustomMob." + i + ".OffHandEquipment.DisplayName"));
+            mobOffHandLores.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".OffHandEquipment.Lores"));
+            mobOffHandDropChance.add(CustomConfig.getCustomMobs().getDouble("CustomMob." + i + ".OffHandEquipment.DropChance"));
+            mobLeggingsMaterial.add(CustomConfig.getCustomMobs().getString("CustomMob." + i + ".LeggingsEquipment.Material"));
+            mobLeggingsEnchantments.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".LeggingsEquipment.Enchantments"));
+            mobLeggingsDisplayName.add(CustomConfig.getCustomMobs().getString("CustomMob." + i + ".LeggingsEquipment.DisplayName"));
+            mobLeggingsLores.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".LeggingsEquipment.Lores"));
+            mobLeggingsDropChance.add(CustomConfig.getCustomMobs().getDouble("CustomMob." + i + ".LeggingsEquipment.DropChance"));
+            mobBootsMaterial.add(CustomConfig.getCustomMobs().getString("CustomMob." + i + ".BootsEquipment.Material"));
+            mobBootsDisplayName.add(CustomConfig.getCustomMobs().getString("CustomMob." + i + ".BootsEquipment.DisplayName"));
+            mobBootsEnchantments.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".BootsEquipment.Enchantments"));
+            mobBootsLores.add(CustomConfig.getCustomMobs().getStringList("CustomMob." + i + ".BootsEquipment.Lores"));
+            mobBootsDropChance.add(CustomConfig.getCustomMobs().getDouble("CustomMob." + i + ".BootsEquipment.DropChance"));
         }
     }
 }

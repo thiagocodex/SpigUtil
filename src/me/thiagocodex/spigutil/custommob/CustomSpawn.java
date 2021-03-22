@@ -1,7 +1,7 @@
 package me.thiagocodex.spigutil.custommob;
 
 import me.thiagocodex.spigutil.SpigUtil;
-import org.bukkit.Bukkit;
+import me.thiagocodex.spigutil.utilities.LoaderUtil;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,14 +35,8 @@ public class CustomSpawn implements Listener {
 
     @EventHandler
     public void onSpawn(CreatureSpawnEvent event) {
-        switch (event.getEntity().getClass().getSimpleName()) {
-            case "CraftZombie":
-                CustomZombie.spawn(event);
-                break;
-            case "CraftCat":
-                //CustomCat.spawn(event);
-                break;
-        }
+        if(LoaderUtil.map.containsValue(event.getEntity().getClass().getSimpleName()))
+            CustomMob.spawn(event);
     }
 }
 

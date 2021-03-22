@@ -1,8 +1,7 @@
 package me.thiagocodex.spigutil;
 
 import me.thiagocodex.spigutil.command.ReloadCommand;
-import me.thiagocodex.spigutil.custommob.CustomSpawn;
-import me.thiagocodex.spigutil.custommob.CustomZombie;
+import me.thiagocodex.spigutil.remove.EntityRemove;
 import me.thiagocodex.spigutil.search.BlockStateFinder;
 import me.thiagocodex.spigutil.search.blockstatesearch.FindBlockState;
 import me.thiagocodex.spigutil.search.blockstatesearch.command.FindBlockStateCommand;
@@ -12,22 +11,17 @@ import me.thiagocodex.spigutil.search.spawnersearch.FindSpawner;
 import me.thiagocodex.spigutil.search.spawnersearch.command.FindSpawnerCommand;
 import me.thiagocodex.spigutil.system.ServerSystem;
 import me.thiagocodex.spigutil.tests.NBTTagTest;
+import me.thiagocodex.spigutil.utilities.StringUtil;
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import javax.annotation.Nonnull;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -95,6 +89,43 @@ public class Commander implements CommandExecutor, TabCompleter {
                 case "test":
                     NBTTagTest.giveMod(((Player) commandSender));
                     break;
+                case "remove":
+                    EntityRemove entityRemove = new EntityRemove();
+                    entityRemove.check(((Player) commandSender));
+
+                    if (strings[1].equalsIgnoreCase("entity")) {
+
+                        StringBuilder stringBuilder = new StringBuilder();
+
+                        for (int i = 3; i < strings.length; i++) {
+                            stringBuilder.append(strings[i]).append(" ");
+                        }
+                        switch (strings[2]) {
+                            case "name":
+                                entityRemove.setTarget(StringUtil.color(stringBuilder.substring(0, stringBuilder.length() - 1)));
+                                entityRemove.filterName();
+                                entityRemove.message(((Player) commandSender), "entityRemovedByName", strings[3]);
+                                break;
+                            case "type":
+                                entityRemove.setTarget(strings[3]);
+                                entityRemove.filterType();
+                                entityRemove.message(((Player) commandSender), "entityRemovedByType", strings[3]);
+                                break;
+                            case "custom-name":
+                                entityRemove.setTarget(StringUtil.color(stringBuilder.substring(0, stringBuilder.length() - 1)));
+                                entityRemove.filterCustomName();
+                                entityRemove.message(((Player) commandSender), "entityRemoveByCustomName",
+                                        StringUtil.color(stringBuilder.substring(0, stringBuilder.length() - 1)));
+                                break;
+                            case "custom":
+                                entityRemove.filterCustom();
+                                entityRemove.setTarget("");
+                                entityRemove.message(((Player) commandSender), "customEntityRemoved", strings[3]);
+                        }
+                        stringBuilder.setLength(0);
+                        entityRemove.remove();
+                    }
+                    break;
                 case "reload":
                     ReloadCommand.command(commandSender, s, strings);
                     break;
@@ -122,7 +153,7 @@ public class Commander implements CommandExecutor, TabCompleter {
                     }
                     break;
             }
-        }else commandSender.sendMessage(ChatColor.RED + "You don't have spigutil.admin permission to do that.");
+        } else commandSender.sendMessage(ChatColor.RED + "You don't have spigutil.admin permission to do that.");
         return true;
     }
 

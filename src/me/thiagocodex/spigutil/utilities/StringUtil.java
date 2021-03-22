@@ -5,7 +5,15 @@ import net.md_5.bungee.api.ChatColor;
 public class StringUtil {
 
 
-    public static String color(String text){
+    public static String addCraftPrefix(String id) {
+        return "Craft" + id;
+    }
+
+    public static String removeCraftPrefix(String className){
+        return className.replaceAll("Craft", "");
+    }
+
+    public static String color(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
     }
 
